@@ -1,11 +1,12 @@
 import React from "react";
-import { useUsers } from "../../api/users";
+import AppBar from "./AppBar";
+import { Outlet } from "react-router-dom";
 
 const Layout = () => {
-  const data = useUsers();
   return (
     <div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <AppBar />
+      <Outlet />
     </div>
   );
 };

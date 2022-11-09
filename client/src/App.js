@@ -1,20 +1,25 @@
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { ThemeProvider } from "@mui/material/styles";
 
-// User Imports
-import themeOptions from "./themeOptions";
 // components
 import Layout from "./components/Layout";
 import React from "react";
 import Login from "./pages/Auth/Login";
-import { useAuthContext } from "./context/Auth";
+import Projects from "./pages/Projects";
+import Protected from "./components/Routes/Protected";
 
 function App() {
-  const value = useAuthContext();
   return (
-    <ThemeProvider theme={themeOptions}>
-      <React.Fragment>{!value.user ? <Login /> : <Layout />}</React.Fragment>
-    </ThemeProvider>
+    <Routes>
+      <Route path="login" element={<Login />} />
+      <Route path="/*" element={<Layout />}>
+        <Route element={<Protected />}>
+          <Route path="projects" element={<Projects />} />
+        </Route>
+        <Route path="*" element={<div>404</div>}></Route>
+      </Route>
+      <Route path="/" element={<div>404</div>}></Route>
+    </Routes>
   );
 }
 
