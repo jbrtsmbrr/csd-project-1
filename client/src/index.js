@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { SWRConfig } from "swr";
-import { ThemeProvider } from "@emotion/react";
+import { ThemeProvider } from "@mui/material/styles";
 import themeOptions from "./themeOptions";
 import AuthProvider from "./context/Auth";
 
@@ -21,9 +21,9 @@ root.render(
       <ThemeProvider theme={themeOptions}>
         <Router>
           <AuthProvider>
-            <React.Fragment>
-              <App />
-            </React.Fragment>
+            {/* <React.Fragment> */}
+            <App />
+            {/* </React.Fragment> */}
             {/* <React.Fragment>{!value.user ? <Login /> : <Layout />}</React.Fragment> */}
           </AuthProvider>
         </Router>

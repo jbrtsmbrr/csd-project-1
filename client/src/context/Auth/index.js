@@ -8,7 +8,7 @@ import {
 } from "react";
 import Cookie from "js-cookie";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useUsers } from "../../api/users";
+import { loginUser } from "../../api/users";
 
 export const AuthContext = createContext({});
 export const useAuthContext = () => {
@@ -20,11 +20,13 @@ export const useAuthContext = () => {
 };
 
 const AuthProvider = ({ children }) => {
-  const users = useUsers();
   const [user, setUser] = useState(() => {
     const user = JSON.parse(Cookie.get("user") || "{}");
-    return user;
+
+    return Object.keys(user).length ? user : null;
   });
+
+  console.log(user);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/projects";
@@ -41,25 +43,23 @@ const AuthProvider = ({ children }) => {
     };
   }, [user]);
 
-  const login = useCallback(
-    (username, password) => {
-      const user = users?.filter(
-        (user) => user.username === username && user.username === password
-      );
-      if (!user.length) {
-        return { error: "Can't find user." };
-      }
+  const login = useCallback(async (username, password) => {
+    const response = await loginUser({ username, password });
+    const { data, error } = await response;
 
-      setUser(user[0]);
-      Cookie.set("user", JSON.stringify(user[0]));
-      navigate(from, { replace: true });
-    },
-    [users]
-  );
+    if (error) return error;
+
+    const { user, token } = data;
+    setUser(user);
+    Cookie.set("user", JSON.stringify(user));
+    Cookie.set("token", token);
+    navigate(from, { replace: true });
+  }, []);
 
   const logout = useCallback(() => {
     setUser(null);
     Cookie.remove("user");
+    Cookie.remove("token");
     navigate("/login");
   }, []);
 
