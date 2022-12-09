@@ -81,64 +81,69 @@ export default function Users() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.users?.map((row, index) => (
-              <TableRow
-                key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  <Typography variant="subtitle2" fontWeight={600}>
-                    {row.first_name} {row.last_name}
-                  </Typography>
-                  <Typography variant="body2">{row.email}</Typography>
-                </TableCell>
-                <TableCell>{row.type.description}</TableCell>
-                {/* <TableCell>
-                  <Typography variant="subtitle2">Capstone Title</Typography>
-                  <Rating readOnly defaultValue={index} />
-                </TableCell> */}
-                <TableCell>
-                  <Chip
-                    label={row.status}
-                    sx={{ width: "fit-content", textTransform: "capitalize" }}
-                    size="small"
-                    color={row.status === "pending" ? "info" : "warning"}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Tooltip
-                    title={row.status === "pending" ? "Approve" : "Revoke"}
-                  >
-                    <IconButton
+            {data?.users?.map((row, index) => {
+              if (row.role.description === "Admin") {
+                return null;
+              }
+              return (
+                <TableRow
+                  key={row._id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    <Typography variant="subtitle2" fontWeight={600}>
+                      {row.first_name} {row.last_name}
+                    </Typography>
+                    <Typography variant="body2">{row.email}</Typography>
+                  </TableCell>
+                  <TableCell>{row?.type?.description}</TableCell>
+                  {/* <TableCell>
+                <Typography variant="subtitle2">Capstone Title</Typography>
+                <Rating readOnly defaultValue={index} />
+              </TableCell> */}
+                  <TableCell>
+                    <Chip
+                      label={row.status}
+                      sx={{ width: "fit-content", textTransform: "capitalize" }}
                       size="small"
-                      onClick={() => {
-                        updateStatus(row);
-                      }}
+                      color={row.status === "pending" ? "info" : "warning"}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Tooltip
+                      title={row.status === "pending" ? "Approve" : "Revoke"}
                     >
-                      {row.status === "pending" ? (
-                        <PersonAddAlt1 />
-                      ) : (
-                        <PersonAddDisabled />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="View Documents in other tab">
-                    <IconButton
-                      onClick={() => {
-                        window.open(row.attachment);
-                      }}
-                    >
-                      <ViewDocumentIcon />
-                    </IconButton>
-                  </Tooltip>
-                  {/* <Tooltip title="View Attachment">
-                      <IconButton size="small">
-                        <PersonAddDisabled />
+                      <IconButton
+                        size="small"
+                        onClick={() => {
+                          updateStatus(row);
+                        }}
+                      >
+                        {row.status === "pending" ? (
+                          <PersonAddAlt1 />
+                        ) : (
+                          <PersonAddDisabled />
+                        )}
                       </IconButton>
-                    </Tooltip> */}
-                </TableCell>
-              </TableRow>
-            ))}
+                    </Tooltip>
+                    <Tooltip title="View Documents in other tab">
+                      <IconButton
+                        onClick={() => {
+                          window.open(row.attachment);
+                        }}
+                      >
+                        <ViewDocumentIcon />
+                      </IconButton>
+                    </Tooltip>
+                    {/* <Tooltip title="View Attachment">
+                    <IconButton size="small">
+                      <PersonAddDisabled />
+                    </IconButton>
+                  </Tooltip> */}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

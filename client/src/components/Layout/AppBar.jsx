@@ -32,8 +32,6 @@ function ResponsiveAppBar() {
     return ["projects", "dashboard"];
   }, [user?.role]);
 
-  console.log(pages);
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };

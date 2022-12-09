@@ -48,17 +48,25 @@ const Signup = () => {
 
   const handleRegisterUser = async (event) => {
     event.preventDefault();
+    if (fields.password !== fields.password2) {
+      setErrors((prev) => ({
+        ...prev,
+        password2: "Please provide a valid value.",
+      }));
+      return;
+    }
+    if (!fields.file) {
+      setErrors((prev) => ({ ...prev, file: "Please provide a valid value." }));
+      return;
+    }
     const registrationResponse = await registerUser({ ...fields });
-    console.log(registrationResponse);
     if (!registrationResponse?.data?.errors?.length) {
       setErrors((prevErrors) =>
         Object.keys(prevErrors).reduce((accum, errorKey) => {
-          console.log(errorKey);
           accum[errorKey] = "";
           return accum;
         }, prevErrors)
       );
-      console.log(errors);
       setSnackbar(true);
       setFields((prevFields) =>
         Object.keys(prevFields).reduce((accum, fieldKey) => {
@@ -82,7 +90,6 @@ const Signup = () => {
   const handleFieldChange = (event) => {
     const { name, value } = event.target;
     const val = name === "file" ? event.target.files[0] : value;
-    console.log(val);
     setFields((fields) => ({
       ...fields,
       [name]: val,
@@ -235,6 +242,7 @@ const Signup = () => {
                 </Grid>
                 <Grid item width="100%">
                   <TextField
+                    required
                     type="password"
                     value={fields.password2}
                     error={errors.password2}
@@ -280,6 +288,11 @@ const Signup = () => {
                     className={classes.uploadInput}
                     onChange={handleFieldChange}
                   />
+                  {errors.file && (
+                    <Alert severity="error" style={{ width: "100%" }}>
+                      {errors.file}
+                    </Alert>
+                  )}
                 </Grid>
               </Grid>
             </Grid>

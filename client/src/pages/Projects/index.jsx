@@ -103,7 +103,6 @@ const Projects = () => {
   const handleClick = (project_id) => {
     // Add website count
     const token = Cookies.get("token");
-    console.log(token);
     if (token)
       axios.post(
         `${process.env.REACT_APP_BASE_URL}/capstone/update/views`,

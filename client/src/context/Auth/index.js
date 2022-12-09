@@ -26,7 +26,6 @@ const AuthProvider = ({ children }) => {
     return Object.keys(user).length ? user : null;
   });
 
-  console.log(user);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/projects";
