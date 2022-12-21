@@ -29,7 +29,11 @@ function ResponsiveAppBar() {
     if (user?.role?.description === "Admin")
       return ["projects", "dashboard", "admin"];
 
-    return ["projects", "dashboard"];
+    console.log(user);
+
+    return user?.type?.description === "Professor"
+      ? ["projects", "assigned", "dashboard"]
+      : ["projects", "dashboard"];
   }, [user?.role]);
 
   const handleOpenNavMenu = (event) => {

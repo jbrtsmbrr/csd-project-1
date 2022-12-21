@@ -8,6 +8,7 @@ import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Projects from "./pages/Projects";
 import ViewProject from "./pages/Projects/View";
+import AssignedProjects from "./pages/AssignedProjects";
 import Protected from "./components/Routes/Protected";
 import Admin from "./pages/Admin";
 import Users from "./pages/Admin/Users";
@@ -25,6 +26,7 @@ function App() {
         <Route path="projects" element={<Projects />} />
         <Route path="projects/:id" element={<ViewProject />} />
         {/* </Route> */}
+        <Route path="assigned" element={<AssignedProjects />} />
         <Route path="*" element={<div>404</div>}></Route>
         <Route path="/admin" element={<Admin />}>
           <Route path="" element={<Users />} />
