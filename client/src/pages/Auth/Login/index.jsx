@@ -16,6 +16,7 @@ import useLoginStyles from "./login.styles";
 
 const Login = () => {
   const classes = useLoginStyles();
+  const signInButtonRef = React.useRef(null);
   const { login } = useAuthContext();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -29,8 +30,8 @@ const Login = () => {
 
   useEffect(() => {
     const token = Cookies.get("token");
-    if (token) navigate("/projects")
-  }, [])
+    if (token) navigate("/projects");
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -119,6 +120,11 @@ const Login = () => {
                 <TextField
                   type="password"
                   value={password}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      signInButtonRef.current.click();
+                    }
+                  }}
                   onChange={(event) => setPassword(event.target.value)}
                   label="Password"
                   variant="filled"
@@ -127,7 +133,12 @@ const Login = () => {
               </Grid>
             </Grid>
             <Grid item>
-              <Button variant="outlined" fullWidth onClick={onSignIn}>
+              <Button
+                ref={signInButtonRef}
+                variant="outlined"
+                fullWidth
+                onClick={onSignIn}
+              >
                 Sign In
               </Button>
             </Grid>
@@ -145,7 +156,14 @@ const Login = () => {
               </Button>
             </Grid>
             <Grid item>
-              <Button fullWidth>Continue as Guest</Button>
+              <Button
+                fullWidth
+                onClick={() => {
+                  navigate("/projects");
+                }}
+              >
+                Continue as Guest
+              </Button>
             </Grid>
           </Grid>
         </Grid>
