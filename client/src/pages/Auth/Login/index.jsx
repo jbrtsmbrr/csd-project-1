@@ -162,7 +162,7 @@ const Login = () => {
                   navigate("/projects");
                 }}
               >
-                Continue as Guest
+                Continue as Visitor
               </Button>
             </Grid>
           </Grid>
