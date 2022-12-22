@@ -162,6 +162,9 @@ const Projects = () => {
             capstone;
           const currentUserRate = getCurrentUserRate(user?._id, ratings);
           const { totalRating, count } = getComputedRating(ratings);
+
+          if (capstone?.approver?._id !== user._id) return null;
+
           return (
             <Card
               key={_id}
@@ -277,7 +280,7 @@ const Projects = () => {
                       </a>
                     </Tooltip>
                     <Tooltip title="View full details">
-                      <IconButton onClick={() => navigate(_id)}>
+                      <IconButton onClick={() => navigate(`/projects/${_id}`)}>
                         <ContentIcon />
                       </IconButton>
                     </Tooltip>
