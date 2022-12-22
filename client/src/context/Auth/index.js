@@ -49,6 +49,9 @@ const AuthProvider = ({ children }) => {
     if (error) return error;
 
     const { user, token } = data;
+
+    if (user?.role?.description !== "admin" && user?.status !== "approved") return 1;
+
     setUser(user);
     Cookie.set("user", JSON.stringify(user));
     Cookie.set("token", token);
