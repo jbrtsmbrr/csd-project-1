@@ -81,6 +81,6 @@ export const registerUser = async ({ file, ...args }) => {
 };
 
 export const useTypes = () => {
-  const response = useSWR("http://localhost:4000/types");
+  const response = useSWR(`${process.env.REACT_APP_BASE_URL}/types`);
   return response;
 };
