@@ -84,3 +84,8 @@ export const useTypes = () => {
   const response = useSWR(`${process.env.REACT_APP_BASE_URL}/types`);
   return response;
 };
+
+export const useProfessors = () => {
+  const response = useSWR(`${process.env.REACT_APP_BASE_URL}/professors`);
+  return response;
+};

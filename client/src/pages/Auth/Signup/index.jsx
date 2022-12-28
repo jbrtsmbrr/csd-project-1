@@ -10,17 +10,17 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { AttachFile as AttachFileIcon } from "@mui/icons-material";
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useSignupStyles from "./signup.styles";
-import { registerUser, useTypes } from "../../../api/users";
+import { registerUser, useProfessors, useTypes } from "../../../api/users";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 
 const Signup = () => {
   const { data: typesData } = useTypes();
+  const { data: professorData } = useProfessors();
   const classes = useSignupStyles();
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState(false);
@@ -32,6 +32,7 @@ const Signup = () => {
     password2: "",
     email: "",
     file: "",
+    professor: "",
     type_id: "637204e8fe9899496361d153",
   });
 
@@ -43,6 +44,7 @@ const Signup = () => {
     password: "",
     password2: "",
     file: "",
+    professor: "",
     type_id: "",
   });
 
@@ -187,6 +189,37 @@ const Signup = () => {
                     </Select>
                   </FormControl>
                 </Grid>
+                {fields.type_id === "637204e8fe9899496361d153" && (
+                  <Grid item width="100%">
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Assign Professor
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        name="professor"
+                        value={fields.professor}
+                        placeholder="Select Professor"
+                        label="Assign Professor"
+                        onChange={handleFieldChange}
+                        defaultValue={""}
+                        required
+                      >
+                        <MenuItem disabled value={""}>
+                          Select Professor
+                        </MenuItem>
+                        {professorData?.professors?.map(
+                          ({ _id, description }) => (
+                            <MenuItem key={_id} value={_id}>
+                              {description}
+                            </MenuItem>
+                          )
+                        )}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
                 <Grid item width="100%">
                   <TextField
                     required
