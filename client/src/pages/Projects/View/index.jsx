@@ -24,8 +24,10 @@ import Comments from "./Comments";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
+  optimisticUpdateChapter,
   optimisticUpdateProject,
   optimisticUpdateProjects,
+  updateChapter,
   useProject,
   useProjects,
 } from "../../../api/projects";
@@ -38,18 +40,11 @@ const View = () => {
   const { id: project_id } = useParams();
   const { user } = useAuthContext();
   const { data: allProjects } = useProjects();
-  const { data, error } = useProject(project_id);
+  const { data, error, mutate } = useProject(project_id);
   const classes = useViewProjectStyles();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const chapters = [
-    { key: 1, status: "uploaded" },
-    { key: 2, status: "uploaded" },
-    { key: 3, status: "" },
-    { key: 4, status: "" },
-    { key: 5, status: "" },
-  ];
   const images = data?.capstone?.images?.map((image, index) => {
     return (
       <img
@@ -69,6 +64,9 @@ const View = () => {
   if (error || !data) {
     return <div>loading...</div>;
   }
+
+  if (data.percentage !== 100 && user.type.description !== "Professor")
+    return <div>401 - Unauthorized</div>;
 
   const { totalRating, count: ratingCount } = getComputedRating(
     data.capstone.ratings
@@ -149,7 +147,7 @@ const View = () => {
                   {data.capstone.title}
                 </Typography>
                 {user && (
-                  <Tooltip title="View Documents in other tab">
+                  <Tooltip title="View Documents">
                     <IconButton
                       onClick={() => {
                         setIsModalOpen(true);
@@ -243,29 +241,107 @@ const View = () => {
             Thesis Chapters
           </Typography>
           <List dense>
-            {chapters.map(({ key, status }) => (
+            {data.capstone.documents.map(({ key, status, path }) => (
               <ListItem
                 key={key}
                 disabled={!status}
                 secondaryAction={
                   <React.Fragment>
                     <IconButton edge="end" aria-label="view" disabled={!status}>
-                      <ViewIcon />
+                      <a
+                        href={path}
+                        target="_blank"
+                        style={{ color: "inherit", height: 20 }}
+                      >
+                        <ViewIcon />
+                      </a>
                     </IconButton>
                     <IconButton
                       edge="end"
                       aria-label="approve"
                       disabled={!status}
+                      color={status === "approved" ? "primary" : "default"}
+                      onClick={async () => {
+                        // send a request to the API to update the data
+                        await updateChapter({
+                          project: data.capstone._id,
+                          status: "approved",
+                          chapter: key,
+                        });
+                        // update the local data immediately and revalidate (refetch)
+                        // NOTE: key is not required when using useSWR's mutate as it's pre-bound
+                        const newProject = {
+                          ...data.capstone,
+                          documents: data.capstone.documents.map((document) => {
+                            if (key === document.key) {
+                              return { ...document, status: "approved" };
+                            }
+                            return document;
+                          }),
+                        };
+
+                        mutate(
+                          { ...data, capstone: newProject },
+                          { revalidate: false }
+                        );
+                      }}
+                      // onClick={() => {
+                      //   optimisticUpdateChapter({
+                      //     allProjects: allProjects?.capstones,
+                      //     project: data.capstone,
+                      //     status: "approved",
+                      //     chapter: key,
+                      //   });
+                      // }}
                     >
                       <ApproveIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      aria-label="decline"
+                      disabled={!status}
+                      color={status === "declined" ? "primary" : "default"}
+                      onClick={async () => {
+                        // send a request to the API to update the data
+                        await updateChapter({
+                          project: data.capstone._id,
+                          status: "declined",
+                          chapter: key,
+                        });
+                        // update the local data immediately and revalidate (refetch)
+                        // NOTE: key is not required when using useSWR's mutate as it's pre-bound
+                        const newProject = {
+                          ...data.capstone,
+                          documents: data.capstone.documents.map((document) => {
+                            if (key === document.key)
+                              return { ...document, status: "declined" };
+                            return document;
+                          }),
+                        };
+
+                        mutate(
+                          { ...data, capstone: newProject },
+                          { revalidate: false }
+                        );
+                      }}
+                      // onClick={() => {
+                      //   optimisticUpdateChapter({
+                      //     allProjects: allProjects?.capstones,
+                      //     project: data.capstone,
+                      //     status: "declined",
+                      //     chapter: key,
+                      //   });
+                      // }}
+                    >
+                      <RejectIcon />
                     </IconButton>
                   </React.Fragment>
                 }
               >
                 <ListItemText
-                  primary={`Chapter ${key}`}
+                  primary={key}
                   secondary={
-                    status
+                    status !== ""
                       ? `chapter-${key}.pdf`
                       : "Document for this chapter hasn't been uploaded"
                   }

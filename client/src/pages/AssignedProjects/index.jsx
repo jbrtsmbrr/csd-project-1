@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import {
   optimisticUpdateProject,
   optimisticUpdateProjects,
+  useAssignedProjects,
   useProjects,
 } from "../../api/projects";
 import axios from "axios";
@@ -97,8 +98,8 @@ export const syncRatingLocally = ({
 const Projects = () => {
   const navigate = useNavigate();
   const { mutate } = useSWRConfig();
-  const response = useProjects();
   const { user } = useAuthContext();
+  const response = useAssignedProjects(user._id);
 
   const handleClick = (project_id) => {
     // Add website count
