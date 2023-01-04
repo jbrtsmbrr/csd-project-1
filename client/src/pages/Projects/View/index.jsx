@@ -262,6 +262,7 @@ const View = () => {
                       disabled={!status}
                       color={status === "approved" ? "primary" : "default"}
                       onClick={async () => {
+                        if (status === "approved") return;
                         // send a request to the API to update the data
                         await updateChapter({
                           project: data.capstone._id,
@@ -302,6 +303,7 @@ const View = () => {
                       disabled={!status}
                       color={status === "declined" ? "primary" : "default"}
                       onClick={async () => {
+                        if (status === "declined") return;
                         // send a request to the API to update the data
                         await updateChapter({
                           project: data.capstone._id,
