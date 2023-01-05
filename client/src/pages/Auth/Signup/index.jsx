@@ -32,7 +32,7 @@ const Signup = () => {
     password2: "",
     email: "",
     file: "",
-    professor: "",
+    professor_id: "",
     type_id: "637204e8fe9899496361d153",
   });
 
@@ -44,7 +44,7 @@ const Signup = () => {
     password: "",
     password2: "",
     file: "",
-    professor: "",
+    professor_id: "",
     type_id: "",
   });
 
@@ -198,8 +198,8 @@ const Signup = () => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        name="professor"
-                        value={fields.professor}
+                        name="professor_id"
+                        value={fields.professor_id}
                         placeholder="Select Professor"
                         label="Assign Professor"
                         onChange={handleFieldChange}
