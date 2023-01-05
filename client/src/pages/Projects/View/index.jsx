@@ -273,6 +273,7 @@ const View = () => {
                         // NOTE: key is not required when using useSWR's mutate as it's pre-bound
                         const newProject = {
                           ...data.capstone,
+                          percentage: data.capstone.percentage + 20,
                           documents: data.capstone.documents.map((document) => {
                             if (key === document.key) {
                               return { ...document, status: "approved" };
@@ -314,6 +315,7 @@ const View = () => {
                         // NOTE: key is not required when using useSWR's mutate as it's pre-bound
                         const newProject = {
                           ...data.capstone,
+                          percentage: data.capstone.percentage - 20,
                           documents: data.capstone.documents.map((document) => {
                             if (key === document.key)
                               return { ...document, status: "declined" };
