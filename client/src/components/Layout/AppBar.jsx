@@ -17,7 +17,7 @@ import { useAuthContext } from "../../context/Auth";
 import { useNavigate } from "react-router-dom";
 
 // const allPages = [/*"Profile",*/ "projects", "dashboard", "admin"];
-const settings = [/*"Profile", "Account", "Dashboard",*/ "Logout"];
+const settings = [/*"Profile", "Account", "Dashboard",*/ "Edit Info", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -179,7 +179,23 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
+                <MenuItem
+                  onClick={() => {
+                    navigate(`/user`)
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Typography textAlign="center">Edit Info</Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    logout();
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+                {/* {settings.map((setting) => (
                   <MenuItem
                     key={setting}
                     onClick={() => {
@@ -191,7 +207,7 @@ function ResponsiveAppBar() {
                   >
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
-                ))}
+                ))} */}
               </Menu>
             </Box>
           ) : (

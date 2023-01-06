@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -74,6 +75,21 @@ export const registerUser = async ({ file, ...args }) => {
     formData,
     {
       headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+
+  return response;
+};
+
+export const updateUser = async (args) => {
+  const token = Cookies.get("token");
+  const response = await axios.post(
+    `${process.env.REACT_APP_BASE_URL}/user/update`,
+    args,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
 

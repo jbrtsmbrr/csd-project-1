@@ -15,6 +15,7 @@ import Users from "./pages/Admin/Users";
 import Dashboard from "./pages/Dashboard";
 import MostView from "./pages/Dashboard/MostView";
 import MostRated from "./pages/Dashboard/MostRated";
+import User from "./pages/User";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="most_view" element={<MostView />} />
           <Route path="most_rated" element={<MostRated />} />
         </Route>
+        <Route path="user" element={<User />} />
       </Route>
       <Route path="/" element={<div>404</div>}></Route>
     </Routes>

@@ -50,13 +50,19 @@ const AuthProvider = ({ children }) => {
 
     const { user, token } = data;
 
-    if (user?.role?.description !== "admin" && user?.status !== "approved") return 1;
+    if (user?.role?.description !== "admin" && user?.status !== "approved")
+      return 1;
 
     setUser(user);
     Cookie.set("user", JSON.stringify(user));
     Cookie.set("token", token);
     navigate(from, { replace: true });
   }, []);
+
+  const updateUserInfo = (newUserInfo) => {
+    setUser(newUserInfo);
+    Cookie.set("user", JSON.stringify(newUserInfo));
+  };
 
   const logout = useCallback(() => {
     setUser(null);
@@ -70,6 +76,7 @@ const AuthProvider = ({ children }) => {
       login,
       user,
       logout,
+      updateUserInfo,
     };
   }, [user, login, logout]);
 
