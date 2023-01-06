@@ -179,14 +179,16 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem
-                  onClick={() => {
-                    navigate(`/user`)
-                    handleCloseUserMenu();
-                  }}
-                >
-                  <Typography textAlign="center">Edit Info</Typography>
-                </MenuItem>
+                {user.role.description !== "Admin" && (
+                  <MenuItem
+                    onClick={() => {
+                      navigate(`/user`);
+                      handleCloseUserMenu();
+                    }}
+                  >
+                    <Typography textAlign="center">Edit Info</Typography>
+                  </MenuItem>
+                )}
                 <MenuItem
                   onClick={() => {
                     logout();

@@ -91,6 +91,8 @@ const User = () => {
     // })();
   };
   const [snackbar, setSnackbar] = useState(false);
+
+  if (user.role.description === "Admin") return <div>401 - Unauthorized</div>;
   return (
     <div style={{ padding: "1rem" }}>
       <Snackbar
