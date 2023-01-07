@@ -65,7 +65,7 @@ const View = () => {
     return <div>loading...</div>;
   }
 
-  if (data.percentage !== 100 && user.type.description !== "Professor")
+  if (data.capstone.percentage !== 100 && user.type.description !== "Professor")
     return <div>401 - Unauthorized</div>;
 
   const { totalRating, count: ratingCount } = getComputedRating(
@@ -146,7 +146,7 @@ const View = () => {
                 <Typography variant="h5" fontWeight={600}>
                   {data.capstone.title}
                 </Typography>
-                {user && (
+                {user && user.type.description === "Professor" && (
                   <Tooltip title="View Documents">
                     <IconButton
                       onClick={() => {
