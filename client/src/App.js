@@ -16,12 +16,30 @@ import Dashboard from "./pages/Dashboard";
 import MostView from "./pages/Dashboard/MostView";
 import MostRated from "./pages/Dashboard/MostRated";
 import User from "./pages/User";
+import OTP from "./pages/Auth/OTP";
+import Completed from "./pages/Auth/OTP/Completed";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import ForgotPasswordCompleted from "./pages/Auth/ForgotPassword/Completed";
+import ChangePassword from "./pages/Auth/ForgotPassword/ChangePassword";
+import ChangePasswordCompleted from "./pages/Auth/ForgotPassword/ChangePassword/Completed";
 
 function App() {
   return (
     <Routes>
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
+      <Route path="verify" element={<OTP />} />
+      <Route path="verify/completed" element={<Completed />} />
+      <Route path="forgot_password" element={<ForgotPassword />} />
+      <Route
+        path="forgot_password/completed"
+        element={<ForgotPasswordCompleted />}
+      />
+      <Route path="change_password" element={<ChangePassword />} />
+      <Route
+        path="change_password/completed"
+        element={<ChangePasswordCompleted />}
+      />
       <Route path="/" element={<Layout />}>
         {/* <Route element={<Protected />}> */}
         <Route path="projects" element={<Projects />} />
