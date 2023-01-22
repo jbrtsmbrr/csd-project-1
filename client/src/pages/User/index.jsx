@@ -20,9 +20,10 @@ import { useAuthContext } from "../../context/Auth";
 const User = () => {
   const { data: professorData } = useProfessors();
   const { user, updateUserInfo } = useAuthContext();
-  const { first_name, last_name, email, username, professor } = user;
+  const { first_name, last_name, email, username, professor, honorific } = user;
 
   const [fields, setFields] = useState({
+    honorific: honorific || "",
     professor_id: professor?._id || "",
     username,
     first_name,
@@ -31,6 +32,7 @@ const User = () => {
   });
 
   const [errors, setErrors] = useState({
+    honorific: "",
     professor_id: "",
     username: "",
     first_name: "",
@@ -120,7 +122,7 @@ const User = () => {
       <Paper elevation={3} sx={{ padding: "1rem", width: "50%" }}>
         <form onSubmit={handleSubmit}>
           <Grid container gap={1} direction="column">
-            {professor && (
+            {professor ? (
               <Grid item>
                 <FormControl fullWidth>
                   <InputLabel id="select-professor">
@@ -144,6 +146,28 @@ const User = () => {
                     {professorData?.professors?.map(({ _id, description }) => (
                       <MenuItem key={_id} value={_id}>
                         {description}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            ) : (
+              <Grid item>
+                <FormControl fullWidth>
+                  <InputLabel>Honorific</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    name="honorific"
+                    value={fields.honorific}
+                    placeholder="Select Honorific"
+                    label="Honorific"
+                    onChange={handleChange}
+                    required
+                  >
+                    {["Mr.", "Ms.", "Mrs."].map((honorific) => (
+                      <MenuItem key={honorific} value={honorific}>
+                        {honorific}
                       </MenuItem>
                     ))}
                   </Select>
