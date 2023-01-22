@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 
 const useFetch = (url, options) => {
@@ -104,4 +104,43 @@ export const useTypes = () => {
 export const useProfessors = () => {
   const response = useSWR(`${process.env.REACT_APP_BASE_URL}/professors`);
   return response;
+};
+
+export const verifyOTP = async (args) => {
+  const response = await axios.post(
+    `${process.env.REACT_APP_BASE_URL}/user/verify_otp`,
+    args
+  );
+
+  return response;
+};
+
+export const useOTP = () => {
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
+  const verify = async (args) => {
+    if (!args.email) {
+      return setError("Can't find your email.");
+    }
+    if (!args.otp) {
+      return setError("Please provide OTP.");
+    }
+    setLoading(true);
+    const response = await verifyOTP(args);
+    if (response.data?.error) setError(response.data.error);
+    setLoading(false);
+
+    return response;
+  };
+
+  return [verify, { loading, error }];
+};
+
+export const resendOTP = async (email) => {
+  const response = await axios.post(
+    `${process.env.REACT_APP_BASE_URL}/user/resend_otp`,
+    { email }
+  );
+
+  console.log(response)
 };
