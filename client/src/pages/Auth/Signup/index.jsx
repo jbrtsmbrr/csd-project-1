@@ -33,6 +33,7 @@ const Signup = () => {
     email: "",
     file: "",
     professor_id: "",
+    honorific: "",
     type_id: "637204e8fe9899496361d153",
   });
 
@@ -44,10 +45,12 @@ const Signup = () => {
     password: "",
     password2: "",
     file: "",
+    honorific: "",
     professor_id: "",
     type_id: "",
   });
 
+  const OTPRef = React.useRef();
   const handleRegisterUser = async (event) => {
     event.preventDefault();
     if (fields.password !== fields.password2) {
@@ -70,6 +73,7 @@ const Signup = () => {
         }, prevErrors)
       );
       setSnackbar(true);
+      OTPRef.current = { ...fields };
       setFields((prevFields) =>
         Object.keys(prevFields).reduce((accum, fieldKey) => {
           accum[fieldKey] = "";
@@ -107,12 +111,13 @@ const Signup = () => {
     <div className={classes.root}>
       <Snackbar
         key={"snackbar--001"}
-        autoHideDuration={3000}
+        autoHideDuration={1000}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={snackbar}
         onClose={() => {
           setSnackbar(false);
-          navigate("/login");
+          console.log(OTPRef.current);
+          navigate(`/verify?email=${OTPRef.current.email}`);
         }}
       >
         <Alert
@@ -141,11 +146,12 @@ const Signup = () => {
           flex: 1,
           position: "relative",
           height: "100vh",
-          backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/logos/mainbg.jpg)`,
+          // backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/logos/mainbg.jpg)`,
           // backgroundPosition: "center",
-          backgroundSize: "cover",
-          boxShadow: "rgb(255 140 0 / 28%) 0px 0px 0px 2000px inset",
-          backgroundRepeat: "no-repeat",
+          // backgroundSize: "cover",
+          // boxShadow: "rgb(255 140 0 / 28%) 0px 0px 0px 2000px inset",
+          // backgroundRepeat: "no-repeat",
+          background: "#000000d9",
         }}
       >
         <form onSubmit={handleRegisterUser}>
@@ -153,7 +159,7 @@ const Signup = () => {
             container
             direction="column"
             gap={1}
-            width={300}
+            width={450}
             className={classes.grid}
           >
             <Grid item container flex={1} sx={{ height: "fit-content" }}>
@@ -168,137 +174,167 @@ const Signup = () => {
                 alignItems="flex-start"
                 spacing={1}
               >
-                <Grid item width="100%">
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Type of User
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      name="type_id"
-                      value={fields.type_id}
-                      label="Type of User"
-                      onChange={handleFieldChange}
-                    >
-                      {typesData?.types?.map(({ _id, description }) => (
-                        <MenuItem key={_id} value={_id}>
-                          {description}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                {fields.type_id === "637204e8fe9899496361d153" && (
-                  <Grid item width="100%">
+                <Grid item container direction="row" spacing={1}>
+                  <Grid item flex={1}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
-                        Assign Professor
+                        Type of User
                       </InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        name="professor_id"
-                        value={fields.professor_id}
-                        placeholder="Select Professor"
-                        label="Assign Professor"
+                        name="type_id"
+                        value={fields.type_id}
+                        label="Type of User"
                         onChange={handleFieldChange}
-                        defaultValue={""}
-                        required
                       >
-                        <MenuItem disabled value={""}>
-                          Select Professor
-                        </MenuItem>
-                        {professorData?.professors?.map(
-                          ({ _id, description }) => (
-                            <MenuItem key={_id} value={_id}>
-                              {description}
-                            </MenuItem>
-                          )
-                        )}
+                        {typesData?.types?.map(({ _id, description }) => (
+                          <MenuItem key={_id} value={_id}>
+                            {description}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Grid>
-                )}
-                <Grid item width="100%">
-                  <TextField
-                    required
-                    value={fields.first_name}
-                    error={errors.first_name}
-                    helperText={errors.first_name}
-                    name="first_name"
-                    onChange={handleFieldChange}
-                    label="First Name"
-                    variant="filled"
-                    fullWidth
-                  />
+                  {fields.type_id === "637204e8fe9899496361d153" ? (
+                    <Grid item flex={1}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                          Adviser
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          name="professor_id"
+                          value={fields.professor_id}
+                          placeholder="Select Professor"
+                          label="Assign Professor"
+                          onChange={handleFieldChange}
+                          defaultValue={""}
+                          required
+                        >
+                          <MenuItem disabled value={""}>
+                            Select Professor
+                          </MenuItem>
+                          {professorData?.professors?.map(
+                            ({ _id, description }) => (
+                              <MenuItem key={_id} value={_id}>
+                                {description}
+                              </MenuItem>
+                            )
+                          )}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  ) : (
+                    <Grid item flex={1}>
+                      <FormControl fullWidth>
+                        <InputLabel>Honorific</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          name="honorific"
+                          value={fields.honorific}
+                          placeholder="Select Honorific"
+                          label="Honorific"
+                          onChange={handleFieldChange}
+                          required
+                        >
+                          {["Mr.", "Ms.", "Mrs."].map((honorific) => (
+                            <MenuItem key={honorific} value={honorific}>
+                              {honorific}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
                 </Grid>
-                <Grid item width="100%">
-                  <TextField
-                    required
-                    value={fields.last_name}
-                    error={errors.last_name}
-                    helperText={errors.last_name}
-                    name="last_name"
-                    onChange={handleFieldChange}
-                    label="Surname"
-                    variant="filled"
-                    fullWidth
-                  />
+                <Grid item container direction="row" spacing={1}>
+                  <Grid item flex={1}>
+                    <TextField
+                      required
+                      value={fields.first_name}
+                      error={errors.first_name}
+                      helperText={errors.first_name}
+                      name="first_name"
+                      onChange={handleFieldChange}
+                      label="First Name"
+                      variant="filled"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item flex={1}>
+                    <TextField
+                      required
+                      value={fields.last_name}
+                      error={errors.last_name}
+                      helperText={errors.last_name}
+                      name="last_name"
+                      onChange={handleFieldChange}
+                      label="Surname"
+                      variant="filled"
+                      fullWidth
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item width="100%">
-                  <TextField
-                    required
-                    value={fields.username}
-                    error={errors.username}
-                    helperText={errors.username}
-                    name="username"
-                    onChange={handleFieldChange}
-                    label="Username"
-                    variant="filled"
-                    fullWidth
-                  />
+                <Grid item container direction="row" spacing={1}>
+                  <Grid item flex={1}>
+                    <TextField
+                      required
+                      value={fields.username}
+                      error={errors.username}
+                      helperText={errors.username}
+                      name="username"
+                      onChange={handleFieldChange}
+                      label="Username"
+                      variant="filled"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item flex={1}>
+                    <TextField
+                      required
+                      type="password"
+                      value={fields.password}
+                      error={errors.password}
+                      helperText={errors.password}
+                      onChange={handleFieldChange}
+                      name="password"
+                      label="Password"
+                      variant="filled"
+                      fullWidth
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item width="100%">
-                  <TextField
-                    required
-                    type="password"
-                    value={fields.password}
-                    error={errors.password}
-                    helperText={errors.password}
-                    onChange={handleFieldChange}
-                    name="password"
-                    label="Password"
-                    variant="filled"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item width="100%">
-                  <TextField
-                    required
-                    type="password"
-                    value={fields.password2}
-                    error={errors.password2}
-                    helperText={errors.password2}
-                    onChange={handleFieldChange}
-                    name="password2"
-                    label="Re-type Password"
-                    variant="filled"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item width="100%">
-                  <TextField
-                    type="email"
-                    label="Email"
-                    variant="filled"
-                    fullWidth
-                    value={fields.email}
-                    error={errors.email}
-                    helperText={errors.email}
-                    name="email"
-                    onChange={handleFieldChange}
-                  />
+                <Grid item container direction="row" spacing={1}>
+                  <Grid item flex={1}>
+                    <TextField
+                      required
+                      type="password"
+                      value={fields.password2}
+                      error={errors.password2}
+                      helperText={errors.password2}
+                      onChange={handleFieldChange}
+                      name="password2"
+                      label="Re-type Password"
+                      variant="filled"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item flex={1}>
+                    <TextField
+                      type="email"
+                      label="Email"
+                      variant="filled"
+                      fullWidth
+                      value={fields.email}
+                      error={errors.email}
+                      helperText={errors.email}
+                      name="email"
+                      onChange={handleFieldChange}
+                    />
+                  </Grid>
                 </Grid>
                 <Grid
                   item
