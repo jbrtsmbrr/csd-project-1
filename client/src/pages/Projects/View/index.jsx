@@ -268,7 +268,7 @@ const View = () => {
               </Typography>
             </div>
             <div>
-              {user && (
+              {user && user?._id !== data.capstone.uploaded_by._id && (
                 <React.Fragment>
                   <Typography variant="subtitle1" fontWeight={600}>
                     Rate this App

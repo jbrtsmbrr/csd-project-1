@@ -270,7 +270,7 @@ const Projects = () => {
                     boxSizing: "border-box",
                   }}
                 >
-                  {user && (
+                  {user && user?._id !== capstone?.uploaded_by?._id && (
                     <React.Fragment>
                       <Typography /*component="span"*/ variant="subtitle2">
                         Rate this thesis
