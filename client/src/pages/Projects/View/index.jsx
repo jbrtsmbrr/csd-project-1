@@ -149,7 +149,14 @@ const View = () => {
             </div>
             
           </div> */}
-          <Swiper images={images} />
+          <Swiper
+            images={data.capstone.images}
+            // images={[
+            //   "https://swiperjs.com/demos/images/nature-4.jpg",
+            //   "https://swiperjs.com/demos/images/nature-5.jpg",
+            //   "https://swiperjs.com/demos/images/nature-6.jpg",
+            // ]}
+          />
           <div
             style={{
               flex: 1,

@@ -11,29 +11,39 @@ import "./styles.css";
 
 // import required modules
 import { EffectCoverflow, Pagination, Autoplay } from "swiper";
+import { makeStyles } from "@mui/styles";
 
-export default function App() {
+const useStyles = makeStyles({
+  wrapper: {
+    // backgroundImage: (props) => {
+    //   return `url("${props.currentImage}")`;
+    // },
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    boxShadow: "rgb(0 0 0 / 42%) 0px 0px 0px 2000px inset",
+    backgroundRepeat: "no-repeat",
+    maxWidth: "50vw",
+  },
+});
+
+export default function App({ images = [] }) {
   const [currentImage, setCurrentImage] = useState(0);
-  const images = [
-    "https://swiperjs.com/demos/images/nature-1.jpg",
-    "https://swiperjs.com/demos/images/nature-2.jpg",
-    "https://swiperjs.com/demos/images/nature-3.jpg",
-  ];
+  const classes = useStyles({ currentImage: images[currentImage] });
   return (
     <div
+      className={classes.wrapper}
       style={{
-        background: `url("${images[currentImage]}")`,
+        background: `url("${images[currentImage].replace("\n    ", "")}")`,
         // backgroundPosition: "center",
-        backgroundSize: "cover",
-        boxShadow: "rgb(0 0 0 / 42%) 0px 0px 0px 2000px inset",
-        backgroundRepeat: "no-repeat",
-        maxWidth: "50vw",
+        // backgroundSize: "cover",
+        // boxShadow: "rgb(0 0 0 / 42%) 0px 0px 0px 2000px inset",
+        // backgroundRepeat: "no-repeat",
+        // maxWidth: "50vw",
       }}
     >
       <Swiper
         modules={[EffectCoverflow, Pagination, Autoplay]}
         onTransitionEnd={function () {
-          console.log(this.realIndex);
           setCurrentImage(this.realIndex);
         }}
         style={{
@@ -60,15 +70,17 @@ export default function App() {
         // pagination={true}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
+        {images.map((image) => (
+          <SwiperSlide>
+            <img alt={`${image}`} src={`${image}`} />
+          </SwiperSlide>
+        ))}
+        {/* <SwiperSlide>
           <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
         </SwiperSlide>
         <SwiperSlide>
           <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </SwiperSlide>
+        </SwiperSlide> */}
         {/* <SwiperSlide>
           <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
         </SwiperSlide> */}
