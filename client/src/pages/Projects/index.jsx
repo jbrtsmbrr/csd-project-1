@@ -98,7 +98,7 @@ export const syncRatingLocally = ({
 
 const Projects = () => {
   const navigate = useNavigate();
-  const { mutate } = useSWRConfig();
+  // const { mutate } = useSWRConfig();
   const response = useProjects();
   const { user } = useAuthContext();
 
@@ -137,6 +137,7 @@ const Projects = () => {
           user: user._id,
           rating,
           token,
+          project_id
         })
       );
     }
@@ -168,6 +169,7 @@ const Projects = () => {
           } = capstone;
           const currentUserRate = getCurrentUserRate(user?._id, ratings);
           const { totalRating, count } = getComputedRating(ratings);
+          console.log(totalRating)
           return (
             <Card
               key={_id}

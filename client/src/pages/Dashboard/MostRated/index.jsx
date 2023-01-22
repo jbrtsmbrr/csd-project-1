@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { Typography } from "@mui/material";
 import Loading from "../../../components/Loading";
+import { getComputedRating } from "../../Projects";
 
 const CustomLabel = () => <div>Most Rated Capstones</div>;
 
@@ -19,10 +20,11 @@ const MostRated = () => {
   const { data, error } = useMostRated();
   const chartData = React.useMemo(() => {
     if (!data?.capstone) return [];
-    return data.capstone.map(({ title, rate }) => {
+    return data.capstone.map(({ title, ratings }) => {
+      const { totalRating, count: _count } = getComputedRating(ratings);
       return {
         title,
-        rate,
+        rate: totalRating,
       };
     });
   }, [data]);
@@ -51,7 +53,7 @@ const MostRated = () => {
         // layout="vertical"
       >
         <CartesianGrid strokeDasharray="5 5" />
-        <YAxis dataKey="rate" type="number" domain={[1, 5]} />
+        <YAxis dataKey="rate" type="number" domain={[0, 5]} />
         <XAxis dataKey="title" type="category" />
         <Tooltip />
         <Legend />

@@ -131,17 +131,13 @@ const Projects = () => {
         rating,
       });
 
-      optimisticUpdateProjects(updatedCapstones, () => updateRating({
-        project_id,
-        rating,
-        user: user?._id,
-        token,
-      }));
+      optimisticUpdateProjects(updatedCapstones);
 
       optimisticUpdateProject(selectedProject, () => updateRating({
         user: user._id,
         rating,
         token,
+        project_id
       }));
     }
   };
