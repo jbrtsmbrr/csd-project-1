@@ -10,6 +10,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Checkbox,
 } from "@mui/material";
 import React from "react";
 import {
@@ -28,6 +29,8 @@ import {
   optimisticUpdateProject,
   optimisticUpdateProjects,
   updateChapter,
+  updateRating,
+  updateVerification,
   useProject,
   useProjects,
 } from "../../../api/projects";
@@ -82,17 +85,14 @@ const View = () => {
         rating,
         project_id,
       });
-      optimisticUpdateProjects(updatedCapstones, {
-        user: user?._id,
-        token,
-        project_id,
-        rating,
-      });
-      optimisticUpdateProject(selectedProject, {
-        user: user?._id,
-        token,
-        rating,
-      });
+      optimisticUpdateProjects(updatedCapstones);
+      optimisticUpdateProject(selectedProject, () =>
+        updateRating({
+          user: user?._id,
+          token,
+          rating,
+        })
+      );
       // axios.post(
       //   `${process.env.REACT_APP_BASE_URL}/capstone/update/rating`,
       //   {
@@ -107,6 +107,22 @@ const View = () => {
       //   }
       // );
     }
+  };
+
+  const handleUpdateVerification = (_, nextValue) => {
+    const token = Cookies.get("token");
+    const newCapstonesList = allProjects.capstones.map((capstone) => ({
+      ...capstone,
+      is_verified: nextValue,
+    }));
+
+    const newCapstone = { ...data?.capstone, is_verified: nextValue };
+
+    optimisticUpdateProject(newCapstone, () => updateVerification({
+      project_id,
+      token
+    }));
+    optimisticUpdateProjects(newCapstonesList);
   };
 
   const currentUserRate = getCurrentUserRate(user?._id, data.capstone.ratings);
@@ -175,6 +191,15 @@ const View = () => {
                     </IconButton>
                   </Tooltip>
                 )} */}
+                <Tooltip
+                  title={data.capstone.is_verified ? "Unverify" : "Verify"}
+                >
+                  <Checkbox
+                    disabled={data.capstone.is_verified}
+                    checked={data.capstone.is_verified}
+                    onChange={handleUpdateVerification}
+                  />
+                </Tooltip>
               </div>
               {/* <Typography variant="body2">
                 {data.capstone.percentage}% Done (Approved by Prof.{" "}
@@ -237,7 +262,11 @@ const View = () => {
                 Tags
               </Typography>
               {data.capstone.tags.map(({ description }) => (
-                <Chip label={description} color="warning" sx={{ background: "#000000d9", margin: "0.15rem" }} />
+                <Chip
+                  label={description}
+                  color="warning"
+                  sx={{ background: "#000000d9", margin: "0.15rem" }}
+                />
               ))}
             </div>
           </div>
