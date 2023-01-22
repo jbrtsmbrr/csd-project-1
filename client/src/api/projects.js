@@ -25,7 +25,7 @@ export const useProject = (id) => {
   return response;
 };
 
-const updateRating = async (body) => {
+export const updateRating = async (body) => {
   const { user, project_id, rating, token } = body;
   axios.post(
     `${process.env.REACT_APP_BASE_URL}/capstone/update/rating`,
@@ -42,7 +42,7 @@ const updateRating = async (body) => {
   );
 };
 
-export const optimisticUpdateProjects = (projects, body = {}) => {
+export const optimisticUpdateProjects = (projects, mutation) => {
   const options = {
     optimisticData: { capstones: projects },
     rollbackOnError: true,
@@ -52,7 +52,7 @@ export const optimisticUpdateProjects = (projects, body = {}) => {
   mutate(
     `${process.env.REACT_APP_BASE_URL}/capstone/list`,
     async () => {
-      updateRating(body);
+      if (typeof mutation === "function") mutation();
 
       return { capstones: projects };
     },
@@ -60,11 +60,11 @@ export const optimisticUpdateProjects = (projects, body = {}) => {
   );
 };
 
-export const optimisticUpdateProject = (project, body) => {
+export const optimisticUpdateProject = (project, mutation) => {
   mutate(
     `${process.env.REACT_APP_BASE_URL}/capstone/list/${project._id}`,
     async () => {
-      updateRating(body);
+      if (typeof mutation === "function") mutation();
       return { capstone: project };
     },
     {
@@ -133,4 +133,19 @@ export const optimisticUpdateChapter = ({
   //   },
   //   options
   // );
+};
+
+export const updateVerification = (body) => {
+  const { project_id, token } = body;
+  axios.post(
+    `${process.env.REACT_APP_BASE_URL}/capstone/update/verified`,
+    {
+      id: project_id,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
 };

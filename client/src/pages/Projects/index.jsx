@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import {
   optimisticUpdateProject,
   optimisticUpdateProjects,
+  updateRating,
   useProjects,
 } from "../../api/projects";
 import axios from "axios";
@@ -129,18 +130,15 @@ const Projects = () => {
         rating,
       });
 
-      optimisticUpdateProjects(updatedCapstones, {
-        project_id,
-        rating,
-        user: user?._id,
-        token,
-      });
+      optimisticUpdateProjects(updatedCapstones);
 
-      optimisticUpdateProject(selectedProject, {
-        user: user._id,
-        rating,
-        token,
-      });
+      optimisticUpdateProject(selectedProject, () =>
+        updateRating({
+          user: user._id,
+          rating,
+          token,
+        })
+      );
     }
   };
 
