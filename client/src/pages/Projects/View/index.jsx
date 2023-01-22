@@ -35,6 +35,7 @@ import { getComputedRating, getCurrentUserRate, syncRatingLocally } from "..";
 import Cookies from "js-cookie";
 import { useAuthContext } from "../../../context/Auth";
 import axios from "axios";
+import { CheckCircle, VolumeUp } from "@mui/icons-material";
 
 const View = () => {
   const { id: project_id } = useParams();
@@ -43,7 +44,7 @@ const View = () => {
   const { data, error, mutate } = useProject(project_id);
   const classes = useViewProjectStyles();
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const images = data?.capstone?.images?.map((image, index) => {
     return (
@@ -65,8 +66,8 @@ const View = () => {
     return <div>loading...</div>;
   }
 
-  if (data.capstone.percentage !== 100 && user.type.description !== "Professor")
-    return <div>401 - Unauthorized</div>;
+  // if (data.capstone.percentage !== 100 && user?.type?.description !== "Professor")
+  //   return <div>401 - Unauthorized</div>;
 
   const { totalRating, count: ratingCount } = getComputedRating(
     data.capstone.ratings
@@ -143,10 +144,27 @@ const View = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h5" fontWeight={600}>
-                  {data.capstone.title}
+                <Typography
+                  variant="h5"
+                  fontWeight={600}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  {data.capstone.is_verified && (
+                    <Tooltip
+                      title={`Verified by
+                  ${data.capstone.approver.first_name}
+                  ${data.capstone.approver.last_name}`}
+                    >
+                      <CheckCircle color="primary" fontSize="small" />
+                    </Tooltip>
+                  )}
+                  <span>{data.capstone.title}</span>
                 </Typography>
-                {user && user.type.description === "Professor" && (
+                {/* {user && user.type.description === "Professor" && (
                   <Tooltip title="View Documents">
                     <IconButton
                       onClick={() => {
@@ -156,13 +174,13 @@ const View = () => {
                       <ViewDocumentIcon />
                     </IconButton>
                   </Tooltip>
-                )}
+                )} */}
               </div>
-              <Typography variant="body2">
+              {/* <Typography variant="body2">
                 {data.capstone.percentage}% Done (Approved by Prof.{" "}
                 {data.capstone.approver.first_name}{" "}
                 {data.capstone.approver.last_name})
-              </Typography>
+              </Typography> */}
               <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <Typography component="span" variant="subtitle2">
                   {totalRating}
@@ -182,7 +200,20 @@ const View = () => {
           </div> */}
             <div style={{ flex: 1 }}>
               <Typography variant="subtitle1" fontWeight={600}>
-                Details
+                <spam>Details</spam>
+                <IconButton
+                  onClick={() => {
+                    const utterance = new SpeechSynthesisUtterance(
+                      data.capstone.description
+                    );
+                    utterance.pitch = 1;
+                    utterance.rate = 1;
+                    utterance.voice = speechSynthesis.getVoices()[4];
+                    speechSynthesis.speak(utterance);
+                  }}
+                >
+                  <VolumeUp />
+                </IconButton>
               </Typography>
               <Typography variant="body2">
                 {data.capstone.description}
@@ -206,7 +237,7 @@ const View = () => {
                 Tags
               </Typography>
               {data.capstone.tags.map(({ description }) => (
-                <Chip label={description} color="warning" />
+                <Chip label={description} color="warning" sx={{ background: "#000000d9", margin: "0.15rem" }} />
               ))}
             </div>
           </div>
@@ -214,7 +245,7 @@ const View = () => {
         <Divider />
         <Comments comments={data.capstone.comments} project_id={project_id} />
       </div>
-      <Modal
+      {/* <Modal
         open={isModalOpen}
         onClose={(_, reason) => {
           // if (reason && reason === "backdropClick" && reason === "escapeKeyDown") return;
@@ -354,7 +385,7 @@ const View = () => {
             ))}
           </List>
         </Box>
-      </Modal>
+      </Modal> */}
     </React.Fragment>
   );
 };

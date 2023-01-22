@@ -1,4 +1,4 @@
-import { Chip, Divider, TextField, Typography } from "@mui/material";
+import { Chip, Divider, TextField, Typography, Rating } from "@mui/material";
 import Cookies from "js-cookie";
 import React from "react";
 import { useState } from "react";
@@ -6,14 +6,17 @@ import useSWR, { useSWRConfig } from "swr";
 import { useAuthContext } from "../../../context/Auth";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import RatingFilter from "./RatingFilter";
+import { FiberManualRecordIcon } from "@mui/icons-material";
 
 const Comments = ({ project_id }) => {
   const [comment, setComment] = useState("");
+  const [selectedItem, setSelectedItem] = useState(6);
   const { mutate } = useSWRConfig();
   const { user } = useAuthContext();
   const token = Cookies.get("token");
   const response = useSWR(
-    `${process.env.REACT_APP_BASE_URL}/capstone/comments/${project_id}`,
+    `${process.env.REACT_APP_BASE_URL}/capstone/comments/${project_id}/${selectedItem}`,
     async (url) => {
       const res = await axios.get(url, {
         headers: {
@@ -39,7 +42,7 @@ const Comments = ({ project_id }) => {
       // revalidate: false,
     };
     mutate(
-      `${process.env.REACT_APP_BASE_URL}/capstone/comments/${project_id}`,
+      `${process.env.REACT_APP_BASE_URL}/capstone/comments/${project_id}/${selectedItem}`,
       async () => {
         axios.post(
           `${process.env.REACT_APP_BASE_URL}/capstone/add/comment`,
@@ -74,6 +77,12 @@ const Comments = ({ project_id }) => {
         <Typography variant="h6" fontWeight={600}>
           Comments
         </Typography>
+        <RatingFilter
+          selectedItem={selectedItem}
+          onSelectedItemChange={({ selectedItem: newSelectedItem }) => {
+            setSelectedItem(newSelectedItem);
+          }}
+        />
         {!user ? (
           <Link to="/signup">
             <Typography>Register to add comment</Typography>
@@ -127,9 +136,22 @@ const Comments = ({ project_id }) => {
                   alignItems: "flex-start",
                 }}
               >
-                <Typography variant="body2" fontWeight={600}>
-                  {comment.user.first_name} {comment.user.last_name}
-                </Typography>
+                <div>
+                  <div style={{ display: "flex" }}>
+                    <Typography variant="subtitle2" fontWeight={600}>
+                      {comment.user.first_name} {comment.user.last_name}
+                    </Typography>
+                    &nbsp;&nbsp;
+                    <Typography variant="subtitle2" color={"GrayText"}>
+                      <span>
+                        {new Date(
+                          comment.timestamp || "2023-01-17T08:46:31.952Z"
+                        ).toLocaleString()}
+                      </span>
+                    </Typography>
+                  </div>
+                  <Rating readOnly size="small" defaultValue={comment.rate} />
+                </div>
                 {/* <Chip label="Thesis Exhibit 77" variant="filled" size="small" /> */}
                 <Typography variant="body2">{comment.comment}</Typography>
               </div>
