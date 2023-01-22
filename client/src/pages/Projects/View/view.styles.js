@@ -11,7 +11,7 @@ const useViewProjectStyles = makeStyles((theme) => ({
     height: "80vh",
     display: "flex",
     gap: "1rem",
-    padding: "1rem",
+    // padding: "1rem",
     boxSizing: "border-box",
   },
   imagesContainer: { flex: 1, display: "flex", gap: "1rem" },

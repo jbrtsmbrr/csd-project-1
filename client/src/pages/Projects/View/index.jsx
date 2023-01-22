@@ -11,6 +11,8 @@ import {
   ListItem,
   ListItemText,
   Checkbox,
+  FormGroup,
+  FormControlLabel,
 } from "@mui/material";
 import React from "react";
 import {
@@ -39,6 +41,7 @@ import Cookies from "js-cookie";
 import { useAuthContext } from "../../../context/Auth";
 import axios from "axios";
 import { CheckCircle, VolumeUp } from "@mui/icons-material";
+import Swiper from "./Swiper";
 
 const View = () => {
   const { id: project_id } = useParams();
@@ -118,10 +121,12 @@ const View = () => {
 
     const newCapstone = { ...data?.capstone, is_verified: nextValue };
 
-    optimisticUpdateProject(newCapstone, () => updateVerification({
-      project_id,
-      token
-    }));
+    optimisticUpdateProject(newCapstone, () =>
+      updateVerification({
+        project_id,
+        token,
+      })
+    );
     optimisticUpdateProjects(newCapstonesList);
   };
 
@@ -131,7 +136,7 @@ const View = () => {
     <React.Fragment>
       <div className={classes.root}>
         <div className={classes.wrapper}>
-          <div className={classes.imagesContainer}>
+          {/* <div className={classes.imagesContainer}>
             <div className={classes.images}>
               <div className={classes.imagesWrapper}>
                 {images.map((image) => {
@@ -142,7 +147,9 @@ const View = () => {
             <div className={classes.selectedImage}>
               {images.length && images[selectedImage]}
             </div>
-          </div>
+            
+          </div> */}
+          <Swiper images={images} />
           <div
             style={{
               flex: 1,
@@ -191,15 +198,24 @@ const View = () => {
                     </IconButton>
                   </Tooltip>
                 )} */}
-                <Tooltip
-                  title={data.capstone.is_verified ? "Unverify" : "Verify"}
-                >
-                  <Checkbox
-                    disabled={data.capstone.is_verified}
-                    checked={data.capstone.is_verified}
-                    onChange={handleUpdateVerification}
+                <FormGroup>
+                  <FormControlLabel
+                    label="Verify this project?"
+                    control={
+                      <Tooltip
+                        title={
+                          data.capstone.is_verified ? "Unverify" : "Verify"
+                        }
+                      >
+                        <Checkbox
+                          disabled={data.capstone.is_verified}
+                          checked={data.capstone.is_verified}
+                          onChange={handleUpdateVerification}
+                        />
+                      </Tooltip>
+                    }
                   />
-                </Tooltip>
+                </FormGroup>
               </div>
               {/* <Typography variant="body2">
                 {data.capstone.percentage}% Done (Approved by Prof.{" "}
