@@ -71,11 +71,12 @@ const Login = () => {
           flex: 1,
           position: "relative",
           height: "100vh",
-          backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/logos/mainbg.jpg)`,
+          // backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/logos/mainbg.jpg)`,
           // backgroundPosition: "center",
-          backgroundSize: "cover",
-          boxShadow: "rgb(255 140 0 / 28%) 0px 0px 0px 2000px inset",
-          backgroundRepeat: "no-repeat",
+          // backgroundSize: "cover",
+          // boxShadow: "rgb(255 140 0 / 28%) 0px 0px 0px 2000px inset",
+          // backgroundRepeat: "no-repeat",
+          background: "#000000d9",
         }}
       >
         <Grid
@@ -130,6 +131,15 @@ const Login = () => {
                   variant="filled"
                   fullWidth
                 />
+              </Grid>
+              <Grid item width="100%">
+                <Button
+                  onClick={() => {
+                    navigate("/forgot_password");
+                  }}
+                >
+                  Forgot password?
+                </Button>
               </Grid>
             </Grid>
             <Grid item>
