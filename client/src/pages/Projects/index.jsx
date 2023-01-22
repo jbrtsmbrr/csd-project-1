@@ -14,6 +14,7 @@ import {
   Launch as LaunchIcon,
   Star as StarIcon,
   ContentPasteSearch as ContentIcon,
+  CheckCircle,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import {
@@ -156,8 +157,17 @@ const Projects = () => {
         }}
       >
         {response?.data?.capstones?.map((capstone) => {
-          const { _id, title, description, images, tags, ratings, website } =
-            capstone;
+          const {
+            _id,
+            title,
+            description,
+            images,
+            tags,
+            ratings,
+            website,
+            is_verified,
+            approver,
+          } = capstone;
           const currentUserRate = getCurrentUserRate(user?._id, ratings);
           const { totalRating, count } = getComputedRating(ratings);
           return (
@@ -188,6 +198,7 @@ const Projects = () => {
                   position: "relative",
                   backgroundImage: `url(${images[0]})`,
                   objectFit: "contain",
+                  boxShadow: "rgb(0 0 0 / 28%) 0px 0px 0px 2000px inset",
                 }}
               >
                 <div
@@ -201,7 +212,7 @@ const Projects = () => {
                     <Chip
                       size="small"
                       label={description}
-                      style={{ marginRight: 8 }}
+                      style={{ marginRight: 8, background: "#000000d9" }}
                       color="warning"
                     />
                   ))}
@@ -209,8 +220,25 @@ const Projects = () => {
               </div>
               <div style={{ flexBasis: "60%" }}>
                 <div style={{ padding: 12, boxSizing: "border-box" }}>
-                  <Typography variant="subtitle1">
-                    <b>{title}</b>
+                  <Typography
+                    variant="h5"
+                    fontWeight={600}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                    }}
+                  >
+                    {is_verified && (
+                      <Tooltip
+                        title={`Verified by
+                  ${approver.first_name}
+                  ${approver.last_name}`}
+                      >
+                        <CheckCircle color="primary" fontSize="small" />
+                      </Tooltip>
+                    )}
+                    <span>{title}</span>
                   </Typography>
                   <div
                     style={{ display: "flex", alignItems: "center", gap: 2 }}
