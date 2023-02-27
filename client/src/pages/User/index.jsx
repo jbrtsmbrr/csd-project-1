@@ -96,7 +96,17 @@ const User = () => {
 
   if (user.role.description === "Admin") return <div>401 - Unauthorized</div>;
   return (
-    <div style={{ padding: "1rem" }}>
+    <div
+      style={{
+        padding: "1rem",
+        boxSizing: "border-box",
+        backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/backgrounds/main.jpg)`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        height: "90vh"
+      }}
+    >
       <Snackbar
         key={"snackbar--001"}
         autoHideDuration={3000}

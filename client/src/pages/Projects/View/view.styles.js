@@ -4,6 +4,10 @@ const useViewProjectStyles = makeStyles((theme) => ({
   root: {
     maxWidth: "100vw",
     overflowX: "hidden",
+    backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/backgrounds/main.jpg)`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
   },
   wrapper: {
     position: "relative",

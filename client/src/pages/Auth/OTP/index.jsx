@@ -34,7 +34,13 @@ const OTP = () => {
   };
 
   return (
-    <div style={{ height: "100vh", width: "100vw" }}>
+    <div
+      style={{
+        height: "100vh",
+        width: "100vw",
+        backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/backgrounds/main.jpg)`,
+      }}
+    >
       <Paper
         style={{
           position: "relative",

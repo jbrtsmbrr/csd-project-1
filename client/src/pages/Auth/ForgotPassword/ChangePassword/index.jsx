@@ -107,6 +107,7 @@ const ChangePassword = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/backgrounds/main.jpg)`,
       }}
     >
       <form

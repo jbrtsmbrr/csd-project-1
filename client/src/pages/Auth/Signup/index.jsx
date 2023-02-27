@@ -151,7 +151,8 @@ const Signup = () => {
           // backgroundSize: "cover",
           // boxShadow: "rgb(255 140 0 / 28%) 0px 0px 0px 2000px inset",
           // backgroundRepeat: "no-repeat",
-          background: "#000000d9",
+          // background: "#000000d9",
+          backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/backgrounds/login.jpg)`,
         }}
       >
         <form onSubmit={handleRegisterUser}>

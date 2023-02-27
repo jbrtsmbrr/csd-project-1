@@ -7,7 +7,7 @@ const useSignupStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "#eee",
+    // background: "#eee",
   },
   login_container: {
     flex: 1,

@@ -137,7 +137,7 @@ const Projects = () => {
           user: user._id,
           rating,
           token,
-          project_id
+          project_id,
         })
       );
     }
@@ -148,11 +148,17 @@ const Projects = () => {
       <div
         style={{
           display: "flex",
-          alignItems: "center",
+          // alignItems: "center",
           flexWrap: "wrap",
           justifyContent: "center",
           gap: 14,
           paddingBlock: 18,
+          boxSizing: "border-box",
+          backgroundImage: `url(${process.env.PUBLIC_URL}/assets/images/backgrounds/main.jpg)`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          minHeight: "90vh",
         }}
       >
         {response?.data?.capstones?.map((capstone) => {
@@ -169,7 +175,7 @@ const Projects = () => {
           } = capstone;
           const currentUserRate = getCurrentUserRate(user?._id, ratings);
           const { totalRating, count } = getComputedRating(ratings);
-          console.log(totalRating)
+          console.log(totalRating);
           return (
             <Card
               key={_id}
@@ -218,7 +224,13 @@ const Projects = () => {
                   ))}
                 </div>
               </div>
-              <div style={{ flexBasis: "60%" }}>
+              <div
+                style={{
+                  flexBasis: "60%",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <div style={{ padding: 12, boxSizing: "border-box" }}>
                   <Typography
                     variant="h5"
@@ -258,6 +270,8 @@ const Projects = () => {
                       ({count} Reviews)
                     </Typography>
                   </div>
+                </div>
+                <div style={{ flex: 1, padding: 12, boxSizing: "border-box" }}>
                   <Typography
                     variant="subtitle2"
                     style={{ overflowY: "clip", maxHeight: "70px" }}
