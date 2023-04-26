@@ -42,6 +42,7 @@ function App() {
       />
       <Route path="/" element={<Layout />}>
         {/* <Route element={<Protected />}> */}
+        <Route path="/" element={<Projects />} />
         <Route path="projects" element={<Projects />} />
         <Route path="projects/:id" element={<ViewProject />} />
         {/* </Route> */}
