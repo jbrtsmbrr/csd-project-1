@@ -27,13 +27,13 @@ function ResponsiveAppBar() {
 
   const pages = React.useMemo(() => {
     if (user?.role?.description === "Admin")
-      return ["projects", "dashboard", "admin"];
+      return ["projects", "dashboard", "admin", "Download App"];
 
     console.log(user);
 
     return user?.type?.description === "Professor"
-      ? ["projects", "assigned", "dashboard"]
-      : ["projects", "dashboard"];
+      ? ["projects", "assigned", "dashboard", "Download App"]
+      : ["projects", "dashboard", "Download App"];
   }, [user?.role]);
 
   const handleOpenNavMenu = (event) => {
@@ -112,10 +112,20 @@ function ResponsiveAppBar() {
                   key={page}
                   onClick={() => {
                     handleCloseNavMenu();
-                    navigate(`/${page}`);
+                    if (page !== "Download App") navigate(`/${page}`);
                   }}
                 >
-                  <Typography textAlign="center">{page}</Typography>
+                  {page === "Download App" ? (
+                    <a
+                      href={`${process.env.PUBLIC_URL}/CSD_v3.2.apk`}
+                      download
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      {page}
+                    </a>
+                  ) : (
+                    <Typography textAlign="center">{page}</Typography>
+                  )}
                 </MenuItem>
               ))}
             </Menu>
@@ -145,11 +155,21 @@ function ResponsiveAppBar() {
                 key={page}
                 onClick={() => {
                   handleCloseNavMenu();
-                  navigate(`/${page}`);
+                  if (page !== "Download App") navigate(`/${page}`);
                 }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page === "Download App" ? (
+                  <a
+                    href={`${process.env.PUBLIC_URL}/CSD_v3.2.apk`}
+                    download
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    {page}
+                  </a>
+                ) : (
+                  page
+                )}
               </Button>
             ))}
           </Box>
