@@ -94,7 +94,7 @@ const View = () => {
           user: user?._id,
           token,
           rating,
-          project_id
+          project_id,
         })
       );
       // axios.post(
@@ -206,24 +206,26 @@ const View = () => {
                     </IconButton>
                   </Tooltip>
                 )} */}
-                <FormGroup>
-                  <FormControlLabel
-                    label="Verify this project?"
-                    control={
-                      <Tooltip
-                        title={
-                          data.capstone.is_verified ? "Unverify" : "Verify"
-                        }
-                      >
-                        <Checkbox
-                          disabled={data.capstone.is_verified}
-                          checked={data.capstone.is_verified}
-                          onChange={handleUpdateVerification}
-                        />
-                      </Tooltip>
-                    }
-                  />
-                </FormGroup>
+                {user?.type?.description === "Professor" && (
+                  <FormGroup>
+                    <FormControlLabel
+                      label="Verify this project?"
+                      control={
+                        <Tooltip
+                          title={
+                            data.capstone.is_verified ? "Unverify" : "Verify"
+                          }
+                        >
+                          <Checkbox
+                            disabled={data.capstone.is_verified}
+                            checked={data.capstone.is_verified}
+                            onChange={handleUpdateVerification}
+                          />
+                        </Tooltip>
+                      }
+                    />
+                  </FormGroup>
+                )}
               </div>
               {/* <Typography variant="body2">
                 {data.capstone.percentage}% Done (Approved by Prof.{" "}
