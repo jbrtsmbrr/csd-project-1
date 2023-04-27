@@ -20,13 +20,22 @@ const MostRated = () => {
   const { data, error } = useMostRated();
   const chartData = React.useMemo(() => {
     if (!data?.capstone) return [];
-    return data.capstone.map(({ title, ratings }) => {
-      const { totalRating, count: _count } = getComputedRating(ratings);
-      return {
-        title,
-        rate: totalRating,
-      };
-    });
+    return data.capstone
+      .sort((a, b) => {
+        const computedA = getComputedRating(a.ratings);
+        const computedB = getComputedRating(b.ratings);
+
+        if (computedA.totalRating < computedB.totalRating) return 1;
+        if (computedA.totalRating > computedB.totalRating) return -1;
+        return 0;
+      })
+      .map(({ title, ratings }) => {
+        const { totalRating, count: _count } = getComputedRating(ratings);
+        return {
+          title,
+          rate: totalRating,
+        };
+      });
   }, [data]);
 
   if (!data?.capstone) return <Loading />;
