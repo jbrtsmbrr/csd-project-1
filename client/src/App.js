@@ -22,6 +22,7 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ForgotPasswordCompleted from "./pages/Auth/ForgotPassword/Completed";
 import ChangePassword from "./pages/Auth/ForgotPassword/ChangePassword";
 import ChangePasswordCompleted from "./pages/Auth/ForgotPassword/ChangePassword/Completed";
+import TermAndConditions from "./pages/TermsAndConditions";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
         </Route>
         <Route path="user" element={<User />} />
       </Route>
+      <Route path="terms-and-conditions" element={<TermAndConditions />} />
       <Route path="/" element={<div>404</div>}></Route>
     </Routes>
   );

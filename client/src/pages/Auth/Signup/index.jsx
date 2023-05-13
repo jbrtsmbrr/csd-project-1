@@ -7,15 +7,15 @@ import {
   Snackbar,
   Alert,
   FormControl,
+  Checkbox,
   Select,
   MenuItem,
 } from "@mui/material";
 import React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useSignupStyles from "./signup.styles";
 import { registerUser, useProfessors, useTypes } from "../../../api/users";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 const Signup = () => {
@@ -23,6 +23,7 @@ const Signup = () => {
   const { data: professorData } = useProfessors();
   const classes = useSignupStyles();
   const navigate = useNavigate();
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [snackbar, setSnackbar] = useState(false);
   const [fields, setFields] = useState({
     first_name: "",
@@ -53,6 +54,9 @@ const Signup = () => {
   const OTPRef = React.useRef();
   const handleRegisterUser = async (event) => {
     event.preventDefault();
+    
+    if (!agreedToTerms) return;
+
     if (fields.password !== fields.password2) {
       setErrors((prev) => ({
         ...prev,
@@ -100,6 +104,14 @@ const Signup = () => {
       ...fields,
       [name]: val,
     }));
+  };
+
+  const openTerms = () => {
+    window.open(
+      `/terms-and-conditions`,
+      "_blank",
+      "menubar=yes,loaction=yes,resizaable=no,scrollbars=yes,status=no,noopener"
+    );
   };
 
   useEffect(() => {
@@ -363,6 +375,22 @@ const Signup = () => {
                       {errors.file}
                     </Alert>
                   )}
+                </Grid>
+                <Grid item flex={1}>
+                  <Checkbox
+                    size="small"
+                    checked={agreedToTerms}
+                    onClick={() => setAgreedToTerms((tc) => !tc)}
+                  />
+                  <Typography variant="subtitle">
+                    I accept the{" "}
+                    <span
+                      onClick={openTerms}
+                      style={{ color: "blue", textDecoration: "underlined", cursor: "pointer" }}
+                    >
+                      terms & conditions
+                    </span>
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>
